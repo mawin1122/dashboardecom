@@ -25,10 +25,10 @@ function Loginpage() {
         if (res.ok) {
           const profile = await res.json();
           if (String(profile.role || "").trim().toLowerCase() === "admin") {
-            router.replace("/dashboard");
-            return;
+            router.replace("/backend/dashboard");
+          } else {
+            router.replace("/home");
           }
-          router.replace("/404");
           return;
         }
 
@@ -68,10 +68,10 @@ function Loginpage() {
           localStorage.setItem("token", data.token);
         }
         if (String(data?.user?.role || "").trim().toLowerCase() === "admin") {
-          router.push("/dashboard");
+          router.push("/backend/dashboard");
           return;
         }
-        router.push("/404");
+        router.push("/home");
       } else {
         const message = data?.error || data?.message || `เข้าสู่ระบบไม่สำเร็จ (${response.status})`;
         setErrorMessage(message);

@@ -234,7 +234,7 @@ function DashboardPage() {
         if (res.ok) {
           const profile = await res.json();
           if (String(profile.role || "").trim().toLowerCase() !== "admin") {
-            router.replace("/404");
+            router.replace("/home");
             return;
           }
           setAuthorized(true);

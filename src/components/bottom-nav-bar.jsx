@@ -1,18 +1,11 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
-
-import { motion } from "framer-motion";
-import {
-  Home,
-  Package,
-  Tags,
-  History,
-  Users,
-} from "lucide-react";
-
+import { useEffect, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { Home, Package, Tags, History, Users, ShoppingBag, LogIn, LogOut, User, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { clearToken, getAuthHeaders } from "@/lib/auth";
 
 const navItems = [
   { label: "หน้าหลัก", icon: Home, href: "/home" },
@@ -22,86 +15,193 @@ const navItems = [
   { label: "ผู้ใช้", icon: Users, href: "/backend/users" },
 ];
 
-const MOBILE_LABEL_WIDTH = 72;
-
-export function BottomNavBar({
-  className,
-  defaultIndex = 0,
-  stickyTop = false,
-  stickyBottom = false,
-}) {
-  const [activeIndex, setActiveIndex] = useState(defaultIndex);
-  const [hoveredIndex, setHoveredIndex] = useState(null);
+export function BottomNavBar({ className, stickyTop = false, stickyBottom = false }) {
   const router = useRouter();
   const pathname = usePathname();
+  const [user, setUser] = useState(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await fetch("http://localhost:3001/api/users/profile", {
+          credentials: "include",
+          cache: "no-store",
+          headers: getAuthHeaders(),
+        });
+        if (res.ok) setUser(await res.json());
+        else setUser(null);
+      } catch {
+        setUser(null);
+      }
+    };
+    fetchProfile();
+  }, [pathname]);
+
+  useEffect(() => { setMobileOpen(false); }, [pathname]);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("http://localhost:3001/api/users/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      clearToken();
+      router.replace("/login");
+    }
+  };
+
+
+  const navigate = (href) => {
+    setMobileOpen(false);
+    router.push(href);
+  };
 
   return (
-    <motion.nav
-      initial={{ scale: 0.9, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ type: "spring", stiffness: 300, damping: 26 }}
-      role="navigation"
-      aria-label="Bottom Navigation"
+    <header
       className={cn(
-        "bg-card dark:bg-card border border-border dark:border-sidebar-border rounded-full flex items-center p-2 shadow-xl space-x-1 min-w-[320px] max-w-[95vw] h-[52px]",
-        stickyTop && "fixed inset-x-0 top-4 mx-auto z-50 w-fit",
-        stickyBottom && "fixed inset-x-0 bottom-4 mx-auto z-50 w-fit",
+        "w-full z-50 border-b bg-background",
+        stickyTop && "fixed top-0 inset-x-0",
+        stickyBottom && "fixed bottom-0 inset-x-0",
         className
-      )}>
-      {navItems.map((item, idx) => {
-        const Icon = item.icon;
-        const isActive = pathname === item.href || activeIndex === idx;
-        const isHovered = hoveredIndex === idx;
-        const showLabel = isActive || isHovered;
+      )}
+    >
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
 
-        return (
-          <motion.button
-            key={item.label}
-            whileTap={{ scale: 0.97 }}
-            onMouseEnter={() => setHoveredIndex(idx)}
-            onMouseLeave={() => setHoveredIndex(null)}
-            className={cn(
-              "flex items-center gap-0 px-3 py-2 rounded-full transition-colors duration-200 relative h-10 min-w-[44px] min-h-[40px] max-h-[44px]",
-              isActive
-                ? "bg-primary/10 dark:bg-primary/15 text-primary dark:text-primary gap-2"
-                : "bg-transparent text-muted-foreground dark:text-muted-foreground hover:bg-muted dark:hover:bg-muted",
-              isHovered && !isActive && "gap-2",
-              "focus:outline-none focus-visible:ring-0"
-            )}
-            onClick={() => { setActiveIndex(idx); router.push(item.href); }}
-            aria-label={item.label}
-            type="button">
-            <Icon
-              size={22}
-              strokeWidth={2}
-              aria-hidden
-              className="transition-colors duration-200" />
-            <motion.div
-              initial={false}
-              animate={{
-                width: showLabel ? `${MOBILE_LABEL_WIDTH}px` : "0px",
-                opacity: showLabel ? 1 : 0,
-                marginLeft: showLabel ? "8px" : "0px",
-              }}
-              transition={{
-                width: { type: "spring", stiffness: 350, damping: 32 },
-                opacity: { duration: 0.19 },
-                marginLeft: { duration: 0.19 },
-              }}
-              className={cn("overflow-hidden flex items-center max-w-[72px]")}>
-              <span
-                className={cn(
-                  "font-medium text-xs whitespace-nowrap select-none transition-opacity duration-200 overflow-hidden text-ellipsis text-[clamp(0.625rem,0.5263rem+0.5263vw,1rem)] leading-[1.9]",
-                  showLabel ? "text-primary dark:text-primary" : "opacity-0"
-                )}
-                title={item.label}>
+        {/* brand */}
+        <button
+          type="button"
+          onClick={() => navigate("/home")}
+          className="flex items-center gap-2 shrink-0 focus:outline-none"
+        >
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
+            <ShoppingBag size={14} strokeWidth={2.5} className="text-primary-foreground" />
+          </span>
+          <span className="font-semibold text-sm tracking-tight">E-Commerce</span>
+        </button>
+
+        {/* desktop nav */}
+        <nav className="hidden md:flex items-center gap-1 flex-1 px-4">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href || pathname?.startsWith(item.href + "/");
+            return (
+              <Button
+                key={item.label}
+                variant={isActive ? "secondary" : "ghost"}
+                size="sm"
+                onClick={() => navigate(item.href)}
+                className="gap-1.5 text-xs"
+              >
+                <Icon size={14} />
                 {item.label}
+              </Button>
+            );
+          })}
+        </nav>
+
+        {/* right side */}
+        <div className="flex items-center gap-2 shrink-0">
+          {user ? (
+            <div className="hidden md:flex items-center gap-2">
+              <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-600 ring-1 ring-amber-200">
+                🪙 {user.points ?? 0} pts
               </span>
-            </motion.div>
-          </motion.button>
-        );
-      })}
-    </motion.nav>
+
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <User size={14} />
+                <span className="max-w-[100px] truncate">{user.username || user.email}</span>
+              </div>
+              <Separator orientation="vertical" className="h-4" />
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleLogout}
+                className="gap-1.5 text-xs text-destructive hover:text-destructive"
+              >
+                <LogOut size={14} />
+                ออกจากระบบ
+              </Button>
+            </div>
+          ) : (
+            <Button
+              size="sm"
+              onClick={() => navigate("/login")}
+              className="hidden md:flex gap-1.5 text-xs"
+            >
+              <LogIn size={14} />
+              เข้าสู่ระบบ
+            </Button>
+          )}
+
+          {/* hamburger */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-label="เมนู"
+          >
+            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+          </Button>
+        </div>
+      </div>
+
+      {/* mobile menu */}
+      {mobileOpen && (
+        <div className="md:hidden border-t bg-background px-4 pb-4 pt-2">
+          <nav className="flex flex-col gap-1">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname === item.href || pathname?.startsWith(item.href + "/");
+              return (
+                <Button
+                  key={item.label}
+                  variant={isActive ? "secondary" : "ghost"}
+                  className="justify-start gap-2"
+                  onClick={() => navigate(item.href)}
+                >
+                  <Icon size={16} />
+                  {item.label}
+                </Button>
+              );
+            })}
+          </nav>
+
+          {user ? (
+            <>
+              <Separator className="my-3" />
+              <div className="flex items-center justify-between px-1">
+                <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                  <User size={14} />
+                  <span className="truncate max-w-[160px]">{user.username || user.email}</span>
+                </div>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={handleLogout}
+                  className="gap-1.5 text-xs"
+                >
+                  <LogOut size={14} />
+                  ออกจากระบบ
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              <Separator className="my-3" />
+              <Button className="w-full gap-2" onClick={() => navigate("/login")}>
+                <LogIn size={16} />
+                เข้าสู่ระบบ
+              </Button>
+            </>
+          )}
+        </div>
+      )}
+    </header>
   );
 }
 

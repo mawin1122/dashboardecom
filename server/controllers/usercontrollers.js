@@ -81,6 +81,7 @@ exports.login = (req, res) => {
                 username: user.username,
                 email: user.email,
                 role: normalizedRole,
+                points: user.point,
             },
         });
         console.log('Login successful:', { id: user.id, email: user.email });
@@ -92,7 +93,7 @@ exports.getProfile = (req, res) => {
     if (!userId) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
-    const query = 'SELECT id, username, email, role FROM users WHERE id = ?';
+    const query = 'SELECT id, username, email, role, point FROM users WHERE id = ?';
     connection.query(query, [userId], (err, results) => {
         if (err) {
             console.error('Error fetching user profile:', err);
@@ -101,7 +102,14 @@ exports.getProfile = (req, res) => {
         if (results.length === 0) {
             return res.status(404).json({ error: 'User not found' });
         }
-        res.json(results[0]);
+        const user = results[0];
+        res.json({
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            role: user.role,
+            points: user.point,
+        });
     });
 };
 
