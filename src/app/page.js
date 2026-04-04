@@ -1,10 +1,10 @@
 import Image from "next/image";
-import Loginpage from "./login/page.js";
+import Home from "./home/page.js";
 
-export default function Home() {
+export default function App() {
   return (
     <>
-    <Loginpage/>
+    <Home/>
     </>
   );
 }

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { Sidebar } from "../../../components/sidebar";
+import { Sidebar } from "@/components/sidebar";
 
 const EMPTY_FORM = {
   name: "",

@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Sidebar } from "../../components/sidebar";
-import { DataTable } from "../../components/data-table";
-import { clearToken, getAuthHeaders } from "../../lib/auth";
+import { Sidebar } from "@/components/sidebar";
+import { DataTable } from "@/components/data-table";
+import { clearToken, getAuthHeaders } from "@/lib/auth";
 
 const API_BASE = "http://localhost:3001/api/history";
 

@@ -4,9 +4,9 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { Plus, Pencil, Trash2 } from "lucide-react";
-import { Sidebar } from "../../components/sidebar";
-import { DataTable } from "../../components/data-table";
-import { clearToken, getAuthHeaders } from "../../lib/auth";
+import { Sidebar } from "@/components/sidebar";
+import { DataTable } from "@/components/data-table";
+import { clearToken, getAuthHeaders } from "@/lib/auth";
 
 const EMPTY_CATEGORY_FORM = {
   name: "",

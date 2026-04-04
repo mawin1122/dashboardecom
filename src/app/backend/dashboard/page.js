@@ -16,8 +16,8 @@ import {
 import { Bar, Line } from "react-chartjs-2";
 import { Activity, CreditCard, Package, ShoppingCart, Users } from "lucide-react";
 
-import { Sidebar } from "../../components/sidebar";
-import { clearToken, getAuthHeaders } from "../../lib/auth";
+import { Sidebar } from "@/components/sidebar";
+import { clearToken, getAuthHeaders } from "@/lib/auth";
 
 ChartJS.register(
   CategoryScale,

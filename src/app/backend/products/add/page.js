@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { Sidebar } from "../../../components/sidebar";
+import { Sidebar } from "@/components/sidebar";
 
 const STATUS_OPTIONS = [
   { value: "active", label: "ใช้งาน" },

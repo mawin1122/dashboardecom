@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { Sidebar } from "../../../../components/sidebar";
+import { Sidebar } from "@/components/sidebar";
 
 export default function EditCategoryPage() {
   const router = useRouter();

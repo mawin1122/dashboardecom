@@ -3,9 +3,9 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { Plus, Pencil, Trash2 } from "lucide-react";
-import { Sidebar } from "../../components/sidebar";
-import { DataTable } from "../../components/data-table";
-import { clearToken, getAuthHeaders } from "../../lib/auth";
+import { Sidebar } from "@/components/sidebar";
+import { DataTable } from "@/components/data-table";
+import { clearToken, getAuthHeaders } from "@/lib/auth";
 
 const STATUS_CONFIG = {
   active: { label: "ใช้งาน", className: "bg-green-100 text-green-700" },

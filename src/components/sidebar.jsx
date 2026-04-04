@@ -211,8 +211,8 @@ const Sidebar = ({ title = "หน้าหลัก", children }) => {
                   {String(profile.role || '').toLowerCase() === 'admin' && (
                     <li className="mb-2">
                       <button
-                        onClick={() => navigate("/dashboard")}
-                        className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname === "/dashboard" ? "bg-gray-100" : ""}` }>
+                        onClick={() => navigate("/backend/dashboard")}
+                        className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname === "/backend/dashboard" ? "bg-gray-100" : ""}` }>
                         <Home className="h-5 w-5" />
                         หน้าหลัก
                       </button>
@@ -220,16 +220,16 @@ const Sidebar = ({ title = "หน้าหลัก", children }) => {
                   )}
                   <li className="mb-2">
                     <button
-                      onClick={() => navigate("/products")}
-                      className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/products") ? "bg-gray-100" : ""}` }>
+                      onClick={() => navigate("/backend/products")}
+                      className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/backend/products") ? "bg-gray-100" : ""}` }>
                       <Package className="h-5 w-5" />
                       จัดการสินค้า
                     </button>
                   </li>
                   <li className="mb-2">
                     <button
-                      onClick={() => navigate("/categories")}
-                      className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/categories") ? "bg-gray-100" : ""}` }>
+                      onClick={() => navigate("/backend/categories")}
+                      className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/backend/categories") ? "bg-gray-100" : ""}` }>
                       <Tags className="h-5 w-5" />
                       จัดการหมวดหมู่
                     </button>
@@ -237,8 +237,8 @@ const Sidebar = ({ title = "หน้าหลัก", children }) => {
                   {String(profile.role || '').toLowerCase() === 'admin' && (
                     <li className="mb-2">
                       <button
-                        onClick={() => navigate("/users")}
-                        className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/users") ? "bg-gray-100" : ""}` }>
+                        onClick={() => navigate("/backend/users")}
+                        className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/backend/users") ? "bg-gray-100" : ""}` }>
                         <Users className="h-5 w-5" />
                         จัดการผู้ใช้งาน
                       </button>
@@ -246,8 +246,8 @@ const Sidebar = ({ title = "หน้าหลัก", children }) => {
                   )}
                   <li className="mb-2">
                     <button
-                      onClick={() => navigate("/history")}
-                      className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/history") ? "bg-gray-100" : ""}` }>
+                      onClick={() => navigate("/backend/history")}
+                      className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/backend/history") ? "bg-gray-100" : ""}` }>
                       <History className="h-5 w-5" />
                       ประวัติการซื้อ
                     </button>
@@ -326,8 +326,8 @@ const Sidebar = ({ title = "หน้าหลัก", children }) => {
             {String(profile.role || '').toLowerCase() === 'admin' && (
               <li className="mb-2">
                 <button
-                  onClick={() => navigate("/dashboard")}
-                  className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname === "/dashboard" ? "bg-gray-100" : ""}` }>
+                  onClick={() => navigate("/backend/dashboard")}
+                  className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname === "/backend/dashboard" ? "bg-gray-100" : ""}` }>
                   <Home className="h-5 w-5" />
                   หน้าหลัก
                 </button>
@@ -335,16 +335,16 @@ const Sidebar = ({ title = "หน้าหลัก", children }) => {
             )}
             <li className="mb-2">
               <button
-                onClick={() => navigate("/products")}
-                className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/products") ? "bg-gray-100" : ""}` }>
+                onClick={() => navigate("/backend/products")}
+                className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/backend/products") ? "bg-gray-100" : ""}` }>
                 <Package className="h-5 w-5" />
                 จัดการสินค้า
               </button>
             </li>
             <li className="mb-2">
               <button
-                onClick={() => navigate("/categories")}
-                className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/categories") ? "bg-gray-100" : ""}` }>
+                onClick={() => navigate("/backend/categories")}
+                className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/backend/categories") ? "bg-gray-100" : ""}` }>
                 <Tags className="h-5 w-5" />
                 จัดการหมวดหมู่
               </button>
@@ -352,8 +352,8 @@ const Sidebar = ({ title = "หน้าหลัก", children }) => {
             {String(profile.role || '').toLowerCase() === 'admin' && (
               <li className="mb-2">
                 <button
-                  onClick={() => navigate("/users")}
-                  className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/users") ? "bg-gray-100" : ""}` }>
+                  onClick={() => navigate("/backend/users")}
+                  className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/backend/users") ? "bg-gray-100" : ""}` }>
                   <Users className="h-5 w-5" />
                   จัดการผู้ใช้งาน
                 </button>
@@ -361,8 +361,8 @@ const Sidebar = ({ title = "หน้าหลัก", children }) => {
             )}
             <li className="mb-2">
               <button
-                onClick={() => navigate("/history")}
-                className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/history") ? "bg-gray-100" : ""}` }>
+                onClick={() => navigate("/backend/history")}
+                className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/backend/history") ? "bg-gray-100" : ""}` }>
                 <History className="h-5 w-5" />
                 ประวัติการซื้อ
               </button>

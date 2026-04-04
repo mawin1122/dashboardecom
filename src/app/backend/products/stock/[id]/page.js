@@ -3,8 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, Plus, Pencil, Check, X, Trash2 } from "lucide-react";
-import { Sidebar } from "../../../../components/sidebar";
-import { clearToken, getAuthHeaders } from "../../../../lib/auth";
+import { Sidebar } from "@/components/sidebar";
+import { clearToken, getAuthHeaders } from "@/lib/auth";
 
 function parseItemsByLine(rawText) {
   return rawText
