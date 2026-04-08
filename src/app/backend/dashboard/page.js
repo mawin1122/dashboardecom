@@ -16,7 +16,6 @@ import {
 import { Bar, Line } from "react-chartjs-2";
 import { Activity, CreditCard, Package, ShoppingCart, Users } from "lucide-react";
 
-import { Sidebar } from "@/components/sidebar";
 import { clearToken, getAuthHeaders } from "@/lib/auth";
 
 ChartJS.register(
@@ -419,7 +418,7 @@ function DashboardPage() {
   };
 
   return (
-    <Sidebar title="แดชบอร์ดวิเคราะห์">
+    
       <div className="space-y-6">
         <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
@@ -591,7 +590,7 @@ function DashboardPage() {
           </div>
         </div>
       </div>
-    </Sidebar>
+    
   );
 }
 

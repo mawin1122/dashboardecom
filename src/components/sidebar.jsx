@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Home, User, Settings, Bell, Package, Tags, Users, History } from "lucide-react";
 import { clearToken, getAuthHeaders } from "../lib/auth";
+import { button } from "framer-motion/client";
 
 
 
@@ -318,18 +319,30 @@ const Sidebar = ({ title = "หน้าหลัก", children }) => {
               <p className="font-semibold">{profile.username}</p>
               <p className="text-sm text-gray-500">{profile.email}</p>
             </div>
+
           </div>
+                                                   <button
+  onClick={() => navigate("/home")}
+  className="mt-4 px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 
+             text-white font-semibold rounded-xl shadow-md 
+             hover:from-blue-600 hover:to-indigo-600 
+             transition-all duration-300"
+>
+  ← Back to Home
+</button>
         </div>
         {/* Navigation Section */}
         <nav className="flex-1 p-4 overflow-y-auto">
           <ul>
             {String(profile.role || '').toLowerCase() === 'admin' && (
+
               <li className="mb-2">
+
                 <button
                   onClick={() => navigate("/backend/dashboard")}
                   className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname === "/backend/dashboard" ? "bg-gray-100" : ""}` }>
                   <Home className="h-5 w-5" />
-                  หน้าหลัก
+                  เเดชบอร์ด
                 </button>
               </li>
             )}

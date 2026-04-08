@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { Plus, Pencil, Trash2 } from "lucide-react";
-import { Sidebar } from "@/components/sidebar";
 import { DataTable } from "@/components/data-table";
 import { clearToken, getAuthHeaders } from "@/lib/auth";
 
@@ -230,7 +229,7 @@ export default function CategoriesPage() {
   }
 
   return (
-    <Sidebar title="จัดการหมวดหมู่">
+    
       <section className="space-y-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -361,6 +360,6 @@ export default function CategoriesPage() {
           </>
         )}
       </section>
-    </Sidebar>
+    
   );
 }

@@ -1,25 +1,18 @@
 "use client";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
-import Footer from "@/components/footer";
-
 const slides = [
   { src: "https://img2.pic.in.th/pic/pimpaw-4daa1ee07fe0cc10.png", alt: "Slide 1" },
-  { src: "https://img2.pic.in.th/pic/pimpaw-4daa1ee07fe0cc10.png", alt: "Slide 2" },
-  { src: "https://img2.pic.in.th/pic/pimpaw-4daa1ee07fe0cc10.png", alt: "Slide 3" },
-  { src: "https://img2.pic.in.th/pic/pimpaw-4daa1ee07fe0cc10.png", alt: "Slide 4" },
-  { src: "https://img2.pic.in.th/pic/pimpaw-4daa1ee07fe0cc10.png", alt: "Slide 5" },
 ];
 
-function Carousel() {
+function Banner() {
   const [current, setCurrent] = useState(0);
 
   const prev = () => setCurrent((i) => (i - 1 + slides.length) % slides.length);
   const next = () => setCurrent((i) => (i + 1) % slides.length);
 
   return (
-    <div className="relative w-full overflow-hidden rounded-2xl sm:w-full">
+    <div className="relative w-full overflow-hidden rounded-2xl">
       <div className="relative h-56 md:h-96">
         {slides.map((slide, idx) => (
           <div
@@ -35,61 +28,8 @@ function Carousel() {
         ))}
       </div>
 
-      {/* prev */}
-      <button
-        type="button"
-        onClick={prev}
-        className="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-      >
-        <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white">
-          <ChevronLeft className="w-5 h-5 text-white" />
-          <span className="sr-only">Previous</span>
-        </span>
-      </button>
-
-      {/* next */}
-      <button
-        type="button"
-        onClick={next}
-        className="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-      >
-        <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white">
-          <ChevronRight className="w-5 h-5 text-white" />
-          <span className="sr-only">Next</span>
-        </span>
-      </button>
-
-      {/* dots */}
-      <div className="absolute bottom-3 left-1/2 z-30 flex -translate-x-1/2 gap-2">
-        {slides.map((_, idx) => (
-          <button
-            key={idx}
-            type="button"
-            onClick={() => setCurrent(idx)}
-            className={`h-2 rounded-full transition-all ${idx === current ? "w-6 bg-white" : "w-2 bg-white/50"}`}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Category() {
-  return (
-    <div className="container ">
-      <div className="flex  justify-between items-center" >
-        <h2 className="text-3xl font-bold mb-4">หมวดหมู่</h2>
-        <a className="text-blue-500 hover:underline border border-blue-500  px-4 py-2 rounded" href="/shop">ไปที่ร้านค้า</a>
-      </div>
-      <div className="grid grid-cols-2 gap-4 ">
-        <img src="https://img2.pic.in.th/pic/pimpaw-4daa1ee07fe0cc10.png" alt="image" className="rounded-lg w-full" />
-        <img src="https://img2.pic.in.th/pic/pimpaw-4daa1ee07fe0cc10.png" alt="image" className="rounded-lg w-full" />
-        <img src="https://img2.pic.in.th/pic/pimpaw-4daa1ee07fe0cc10.png" alt="image" className="rounded-lg w-full" />
-
-      </div>
 
     </div>
-
   );
 }
 
@@ -97,8 +37,7 @@ function ProductCard() {
   return (
         <div className="container ">
       <div className="flex  justify-between items-center" >
-        <h2 className="text-3xl font-bold mb-4">สินค้าแนะนำ</h2>
-        <a className="text-blue-500 hover:underline border border-blue-500  px-4 py-2 rounded" href="/shop">ไปที่ร้านค้า</a>
+        <h2 className="text-3xl font-bold mb-4">สินค้าในหมวดหมู่</h2>
       </div>
       <div className="grid grid-cols-4 gap-4 ">
      <div className="border border-black rounded-lg py-4 px-3 w-fit bg-white ">
@@ -180,30 +119,19 @@ function ProductCard() {
   </div>
   );
 }
-
-
-
-function Home() {
+function ProductsPage() {
   return (
-    <div className="min-h-screen bg-gray-50 ">
-      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 " >
-        <Carousel />
-        <div className="mt-5">
-          <Category />
+    <div className="min-h-screen bg-gray-50  ">
+      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8" >
+        <Banner />
+
+
+            <div className="mt-4">
+                <ProductCard />
+            </div>
         </div>
-        <div className="mt-5">
-          <ProductCard />
-        </div>
-      </main>
-
-
-        <Footer />
-
-
-    </div>
-    
-  );
+   </div>
+  )
 }
 
-export default Home;
-
+export default ProductsPage

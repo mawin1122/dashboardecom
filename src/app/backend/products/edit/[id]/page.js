@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { Sidebar } from "@/components/sidebar";
 
 const STATUS_OPTIONS = [
   { value: "active", label: "ใช้งาน" },
@@ -126,7 +125,7 @@ export default function EditProductPage() {
   if (!mounted || !authorized) return null;
 
   return (
-    <Sidebar title="แก้ไขสินค้า">
+    
       <section className="max-w-2xl space-y-6">
         <div className="flex items-center gap-3">
           <button
@@ -240,7 +239,7 @@ export default function EditProductPage() {
                 className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500"
               />
               {form.image_url && (
-                <img src={form.image_url} alt="preview" className="mt-2 h-24 w-24 rounded-xl object-cover border border-gray-200" />
+                <img src={form.image_url} alt="preview" className="mt-2 h-24 w-full max-w-24 rounded-xl object-cover border border-gray-200" />
               )}
             </div>
 
@@ -277,6 +276,6 @@ export default function EditProductPage() {
           </form>
         ) : null}
       </section>
-    </Sidebar>
+    
   );
 }

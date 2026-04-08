@@ -3,7 +3,6 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { Plus, Pencil, Trash2 } from "lucide-react";
-import { Sidebar } from "@/components/sidebar";
 import { DataTable } from "@/components/data-table";
 import { clearToken, getAuthHeaders } from "@/lib/auth";
 
@@ -337,7 +336,7 @@ export default function ProductsPage() {
   if (!mounted || !authorized) return null;
 
   return (
-    <Sidebar title="จัดการสินค้า">
+    
       <section className="space-y-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -383,9 +382,9 @@ export default function ProductsPage() {
                 <div key={p.id} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
                   <div className="space-y-3">
                     {p.image_url ? (
-                      <img src={p.image_url} alt={p.name} className="h-[300px] w-[200px] rounded-xl object-contain" />
+                      <img src={p.image_url} alt={p.name} className="h-[300px] w-full rounded-xl object-contain" />
                     ) : (
-                      <div className="flex h-[300px] w-[200px] items-center justify-center rounded-xl bg-gray-100 text-xs text-gray-400">
+                      <div className="flex h-[300px] w-full items-center justify-center rounded-xl bg-gray-100 text-xs text-gray-400">
                         ไม่มีรูป
                       </div>
                     )}
@@ -444,9 +443,9 @@ export default function ProductsPage() {
                   cell: (p) => (
                     <div className="flex items-center gap-3">
                       {p.image_url ? (
-                        <img src={p.image_url} alt={p.name} className="h-[300px] w-[200px] shrink-0 rounded-xl object-contain" />
+                        <img src={p.image_url} alt={p.name} className="h-[300px] w-full max-w-[200px] shrink-0 rounded-xl object-contain" />
                       ) : (
-                        <div className="flex h-[300px] w-[200px] shrink-0 items-center justify-center rounded-xl bg-gray-100 text-gray-400 text-xs">
+                        <div className="flex h-[300px] w-full max-w-[200px] shrink-0 items-center justify-center rounded-xl bg-gray-100 text-gray-400 text-xs">
                           ไม่มีรูป
                         </div>
                       )}
@@ -528,6 +527,6 @@ export default function ProductsPage() {
           </>
         )}
       </section>
-    </Sidebar>
+    
   );
 }

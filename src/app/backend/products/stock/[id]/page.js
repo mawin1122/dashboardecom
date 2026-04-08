@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, Plus, Pencil, Check, X, Trash2 } from "lucide-react";
-import { Sidebar } from "@/components/sidebar";
 import { clearToken, getAuthHeaders } from "@/lib/auth";
 
 function parseItemsByLine(rawText) {
@@ -276,7 +275,7 @@ export default function ProductStockPage() {
   }
 
   return (
-    <Sidebar title="จัดการ stock">
+    
       <section className="space-y-6">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
@@ -440,6 +439,6 @@ export default function ProductStockPage() {
           </div>
         </div>
       </section>
-    </Sidebar>
+    
   );
 }

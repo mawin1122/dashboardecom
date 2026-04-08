@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { clearToken, getAuthHeaders } from "@/lib/auth";
+import { Sidebar } from "@/components/sidebar";
+import { nav } from "framer-motion/client";
 
 export default function BackendLayout({ children }) {
   const router = useRouter();
@@ -38,5 +40,8 @@ export default function BackendLayout({ children }) {
 
   if (!authorized) return null;
 
-  return <>{children}</>;
+
+  return <Sidebar>{children}</Sidebar>;
+
+
 }

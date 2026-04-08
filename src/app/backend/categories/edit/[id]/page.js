@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { Sidebar } from "@/components/sidebar";
 
 export default function EditCategoryPage() {
   const router = useRouter();
@@ -113,7 +112,7 @@ export default function EditCategoryPage() {
   }
 
   return (
-    <Sidebar title="แก้ไขหมวดหมู่">
+    
       <section className="max-w-2xl space-y-6">
         <div className="flex items-center gap-3">
           <button
@@ -189,6 +188,6 @@ export default function EditCategoryPage() {
           </form>
         ) : null}
       </section>
-    </Sidebar>
+    
   );
 }

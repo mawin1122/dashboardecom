@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { Sidebar } from "@/components/sidebar";
 
 const EMPTY_FORM = {
   name: "",
@@ -83,7 +82,7 @@ export default function AddCategoryPage() {
   }
 
   return (
-    <Sidebar title="เพิ่มหมวดหมู่">
+    
       <section className="max-w-2xl space-y-6">
         <div className="flex items-center gap-3">
           <button
@@ -151,6 +150,6 @@ export default function AddCategoryPage() {
           </div>
         </form>
       </section>
-    </Sidebar>
+    
   );
 }

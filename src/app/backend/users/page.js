@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { Plus, Pencil, Trash2 } from "lucide-react";
-import { Sidebar } from "@/components/sidebar";
 import { DataTable } from "@/components/data-table";
 import { clearToken, getAuthHeaders } from "@/lib/auth";
 
@@ -317,7 +316,7 @@ export default function UsersPage() {
   }
 
   return (
-    <Sidebar title="จัดการผู้ใช้งาน">
+    
       <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -425,6 +424,6 @@ export default function UsersPage() {
           </>
         )}
       </div>
-    </Sidebar>
+    
   );
 }

@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Sidebar } from "@/components/sidebar";
 import { DataTable } from "@/components/data-table";
 import { clearToken, getAuthHeaders } from "@/lib/auth";
 
@@ -179,7 +178,7 @@ export default function HistoryPage() {
   }
 
   return (
-    <Sidebar title="ประวัติการซื้อ">
+    
       <div className="space-y-4">
         <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -248,6 +247,6 @@ export default function HistoryPage() {
           )}
         </div>
       </div>
-    </Sidebar>
+    
   );
 }

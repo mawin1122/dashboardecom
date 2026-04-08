@@ -9,13 +9,13 @@ import { clearToken, getAuthHeaders } from "@/lib/auth";
 
 const navItems = [
   { label: "หน้าหลัก", icon: Home, href: "/home" },
-  { label: "สินค้า", icon: Package, href: "/backend/products" },
-  { label: "หมวดหมู่", icon: Tags, href: "/backend/categories" },
-  { label: "ประวัติ", icon: History, href: "/backend/history" },
-  { label: "ผู้ใช้", icon: Users, href: "/backend/users" },
+  { label: "สินค้า", icon: Package, href: "/store" },
+  { label: "เติมเงิน", icon: Tags, href: "/topup" },
+  { label: "ประวัติ", icon: History, href: "/history" },
+  { label: "จัดการหลังบ้าน", icon: Users, href: "/backend/dashboard" },
 ];
 
-export function BottomNavBar({ className, stickyTop = false, stickyBottom = false }) {
+export function BottomNavBar({ className, stickyTop = true, stickyBottom = false }) {
   const router = useRouter();
   const pathname = usePathname();
   const [user, setUser] = useState(null);
