@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, User, Settings, Bell, Package, Tags, Users, History } from "lucide-react";
+import { Home, User, Settings, Bell, Package, Tags, Users, History, GalleryHorizontal } from "lucide-react";
 import { clearToken, getAuthHeaders } from "../lib/auth";
 import { button } from "framer-motion/client";
 
@@ -119,7 +119,7 @@ const XIcon = () => (
   </motion.svg>
 );
 
-const Sidebar = ({ title = "หน้าหลัก", children }) => {
+const Sidebar = ({ title = "เเดชบอร์ด", children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [profile, setProfile] = useState({ username: "กำลังโหลด...", email: "", role: "user" });
   const router = useRouter();
@@ -205,17 +205,27 @@ const Sidebar = ({ title = "หน้าหลัก", children }) => {
                     <p className="text-sm text-gray-500">{profile.email}</p>
                   </div>
                 </div>
+                                                                   <button
+  onClick={() => navigate("/home")}
+  className="mt-4 px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 
+             text-white font-semibold rounded-xl shadow-md 
+             hover:from-blue-600 hover:to-indigo-600 
+             transition-all duration-300"
+>
+  ← Back to Home
+</button>
               </div>
               {/* Navigation Section */}
               <nav className="flex-1 p-4 overflow-y-auto">
                 <ul>
                   {String(profile.role || '').toLowerCase() === 'admin' && (
                     <li className="mb-2">
+                      
                       <button
                         onClick={() => navigate("/backend/dashboard")}
                         className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname === "/backend/dashboard" ? "bg-gray-100" : ""}` }>
                         <Home className="h-5 w-5" />
-                        หน้าหลัก
+                        เเดชบอร์ด
                       </button>
                     </li>
                   )}
@@ -233,6 +243,14 @@ const Sidebar = ({ title = "หน้าหลัก", children }) => {
                       className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/backend/categories") ? "bg-gray-100" : ""}` }>
                       <Tags className="h-5 w-5" />
                       จัดการหมวดหมู่
+                    </button>
+                  </li>
+                  <li className="mb-2">
+                    <button
+                      onClick={() => navigate("/backend/carousel")}
+                      className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/backend/carousel") ? "bg-gray-100" : ""}` }>
+                      <GalleryHorizontal className="h-5 w-5" />
+                      จัดการ Carousel
                     </button>
                   </li>
                   {String(profile.role || '').toLowerCase() === 'admin' && (
@@ -262,7 +280,8 @@ const Sidebar = ({ title = "หน้าหลัก", children }) => {
                   </li>
                   <li className="mb-2">
                     <button
-                      className="flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100">
+                      onClick={() => navigate("/backend/settings")}
+                      className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/backend/settings") ? "bg-gray-100" : ""}` }>
                       <Settings className="h-5 w-5" />
                       ตั้งค่า
                     </button>
@@ -354,18 +373,26 @@ const Sidebar = ({ title = "หน้าหลัก", children }) => {
                 จัดการสินค้า
               </button>
             </li>
-            <li className="mb-2">
-              <button
-                onClick={() => navigate("/backend/categories")}
-                className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/backend/categories") ? "bg-gray-100" : ""}` }>
-                <Tags className="h-5 w-5" />
-                จัดการหมวดหมู่
-              </button>
-            </li>
-            {String(profile.role || '').toLowerCase() === 'admin' && (
-              <li className="mb-2">
-                <button
-                  onClick={() => navigate("/backend/users")}
+                  <li className="mb-2">
+                    <button
+                      onClick={() => navigate("/backend/categories")}
+                      className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/backend/categories") ? "bg-gray-100" : ""}` }>
+                      <Tags className="h-5 w-5" />
+                      จัดการหมวดหมู่
+                    </button>
+                  </li>
+                  <li className="mb-2">
+                    <button
+                      onClick={() => navigate("/backend/carousel")}
+                      className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/backend/carousel") ? "bg-gray-100" : ""}` }>
+                      <GalleryHorizontal className="h-5 w-5" />
+                      จัดการ Carousel
+                    </button>
+                  </li>
+                  {String(profile.role || '').toLowerCase() === 'admin' && (
+                    <li className="mb-2">
+                      <button
+                        onClick={() => navigate("/backend/users")}
                   className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/backend/users") ? "bg-gray-100" : ""}` }>
                   <Users className="h-5 w-5" />
                   จัดการผู้ใช้งาน
@@ -389,7 +416,8 @@ const Sidebar = ({ title = "หน้าหลัก", children }) => {
             </li>
             <li className="mb-2">
               <button
-                className="flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100">
+                onClick={() => navigate("/backend/settings")}
+                className={`flex gap-2 font-medium text-sm items-center w-full py-2 px-4 rounded-xl hover:bg-gray-100 ${pathname.startsWith("/backend/settings") ? "bg-gray-100" : ""}` }>
                 <Settings className="h-5 w-5" />
                 ตั้งค่า
               </button>
@@ -431,7 +459,7 @@ const Sidebar = ({ title = "หน้าหลัก", children }) => {
         </div>
       </div>
       {/* Main Content Area */}
-      <div className="flex-1 ml-0 md:ml-64 transition-all duration-300">
+      <div className="min-w-0 flex-1 ml-0 md:ml-64 transition-all duration-300">
         {/* Top bar for mobile toggle */}
         <div
           className="p-4 bg-gray-100 border-b border-gray-200 md:hidden flex justify-between items-center">

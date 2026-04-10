@@ -8,6 +8,8 @@ const CategoryRoutes = require('./routes/CategoryRoutes');
 const StockRoutes = require('./routes/StockRoutes');
 const BuyRoutes = require('./routes/BuyRoutes');
 const historyRoutes = require('./routes/HistoryRoutes');
+const CarouselRoutes = require('./routes/CarouselRoutes');
+const TopupRoutes = require('./routes/TopupRoutes');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const app = express();
 const port = 3001;
@@ -34,7 +36,8 @@ app.use("/api/categories", CategoryRoutes)
 app.use("/api/stock", StockRoutes)
 app.use("/api/buy", BuyRoutes)
 app.use("/api/history", historyRoutes)
-
+app.use("/api/carousels", CarouselRoutes)
+app.use("/api/topup", TopupRoutes)
 
 // Ensure unknown API paths return JSON instead of Express default HTML.
 app.use('/api', (req, res) => {

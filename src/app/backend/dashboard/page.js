@@ -419,30 +419,32 @@ function DashboardPage() {
 
   return (
     
-      <div className="space-y-6">
+      <div className="min-w-0 space-y-6">
         <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">แดชบอร์ดอีคอมเมิร์ซ</h1>
             <p className="text-sm text-gray-500">สรุปภาพรวมจากข้อมูลจริงของสินค้า ผู้ใช้ และคำสั่งซื้อ</p>
           </div>
-          <div className="inline-flex w-full rounded-xl border border-gray-200 bg-gray-50 p-1 md:w-auto">
-            {Object.entries(RANGE_LABELS).map(([value, label]) => {
-              const isActive = range === value;
-              return (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => setRange(value)}
-                  className={`flex-1 rounded-lg px-3 py-2 text-sm font-medium transition md:flex-none ${
-                    isActive
-                      ? "bg-gray-900 text-white shadow-sm"
-                      : "text-gray-600 hover:bg-white hover:text-gray-900"
-                  }`}
-                >
-                  {label}
-                </button>
-              );
-            })}
+          <div className="w-full overflow-x-auto md:w-auto">
+            <div className="inline-flex min-w-max rounded-xl border border-gray-200 bg-gray-50 p-1">
+              {Object.entries(RANGE_LABELS).map(([value, label]) => {
+                const isActive = range === value;
+                return (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setRange(value)}
+                    className={`rounded-lg px-3 py-2 text-sm font-medium whitespace-nowrap transition ${
+                      isActive
+                        ? "bg-gray-900 text-white shadow-sm"
+                        : "text-gray-600 hover:bg-white hover:text-gray-900"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </header>
 
@@ -503,12 +505,12 @@ function DashboardPage() {
                 <tbody>
                   {recentOrders.map((item) => (
                     <tr key={item.id} className="border-b border-gray-100 last:border-0">
-                      <td className="py-3 text-gray-700">{item.username || item.email || `User ${item.user_id}`}</td>
-                      <td className="py-3 text-gray-700">{item.product_name || `Product ${item.product_id}`}</td>
+                      <td className="py-3 text-gray-700 whitespace-nowrap">{item.username || item.email || `User ${item.user_id}`}</td>
+                      <td className="py-3 text-gray-700 whitespace-nowrap">{item.product_name || `Product ${item.product_id}`}</td>
                       <td className="py-3 text-gray-700">{formatNumber(item.quantity)}</td>
                       <td className="py-3 text-gray-900">{formatCurrency(item.total_price)}</td>
-                      <td className="py-3 text-gray-700">{item.status || "-"}</td>
-                      <td className="py-3 text-gray-500">{formatDateTime(item.created_at)}</td>
+                      <td className="py-3 text-gray-700 whitespace-nowrap">{item.status || "-"}</td>
+                      <td className="py-3 text-gray-500 whitespace-nowrap">{formatDateTime(item.created_at)}</td>
                     </tr>
                   ))}
                   {!loading && recentOrders.length === 0 ? (
@@ -539,10 +541,10 @@ function DashboardPage() {
                 <tbody>
                   {lowStockProducts.map((item) => (
                     <tr key={item.id} className="border-b border-gray-100 last:border-0">
-                      <td className="py-3 text-gray-800">{item.name}</td>
-                      <td className="py-3 text-gray-700">{item.category || "-"}</td>
-                      <td className="py-3 text-gray-700">{formatCurrency(item.price)}</td>
-                      <td className="py-3 font-semibold text-gray-900">{formatNumber(item.stock)}</td>
+                      <td className="py-3 text-gray-800 whitespace-nowrap">{item.name}</td>
+                      <td className="py-3 text-gray-700 whitespace-nowrap">{item.category || "-"}</td>
+                      <td className="py-3 text-gray-700 whitespace-nowrap">{formatCurrency(item.price)}</td>
+                      <td className="py-3 font-semibold text-gray-900 whitespace-nowrap">{formatNumber(item.stock)}</td>
                     </tr>
                   ))}
                   {!loading && lowStockProducts.length === 0 ? (
@@ -574,10 +576,10 @@ function DashboardPage() {
               <tbody>
                 {topPointsUsers.map((item) => (
                   <tr key={item.id} className="border-b border-gray-100 last:border-0">
-                    <td className="py-3 text-gray-800">{item.username}</td>
-                    <td className="py-3 text-gray-700">{item.email}</td>
-                    <td className="py-3 text-gray-700">{item.role}</td>
-                    <td className="py-3 font-semibold text-gray-900">{formatNumber(item.point)}</td>
+                    <td className="py-3 text-gray-800 whitespace-nowrap">{item.username}</td>
+                    <td className="py-3 text-gray-700 whitespace-nowrap">{item.email}</td>
+                    <td className="py-3 text-gray-700 whitespace-nowrap">{item.role}</td>
+                    <td className="py-3 font-semibold text-gray-900 whitespace-nowrap">{formatNumber(item.point)}</td>
                   </tr>
                 ))}
                 {!loading && topPointsUsers.length === 0 ? (

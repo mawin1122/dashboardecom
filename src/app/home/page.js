@@ -1,27 +1,64 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { openBuyProductModal } from "@/lib/buy-modal";
 
 import Footer from "@/components/footer";
 
-const slides = [
-  { src: "https://img2.pic.in.th/pic/pimpaw-4daa1ee07fe0cc10.png", alt: "Slide 1" },
-  { src: "https://img2.pic.in.th/pic/pimpaw-4daa1ee07fe0cc10.png", alt: "Slide 2" },
-  { src: "https://img2.pic.in.th/pic/pimpaw-4daa1ee07fe0cc10.png", alt: "Slide 3" },
-  { src: "https://img2.pic.in.th/pic/pimpaw-4daa1ee07fe0cc10.png", alt: "Slide 4" },
-  { src: "https://img2.pic.in.th/pic/pimpaw-4daa1ee07fe0cc10.png", alt: "Slide 5" },
-];
+const API_BASE = "http://localhost:3001/api";
+const FALLBACK_IMAGE = "https://img2.pic.in.th/pic/pimpaw-4daa1ee07fe0cc10.png";
+const FALLBACK_PRODUCT_IMAGE = "https://img2.pic.in.th/pic/Ghost-of-Tsushima.png";
 
-function Carousel() {
+function SectionHeader({ title, href, linkLabel }) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <h2 className="text-3xl font-bold mb-4">{title}</h2>
+      <a className="rounded border border-blue-500 px-4 py-2 text-blue-500 hover:underline" href={href}>
+        {linkLabel}
+      </a>
+    </div>
+  );
+}
+
+function SectionMessage({ message }) {
+  return <div className="rounded-lg border border-dashed border-gray-300 bg-white px-4 py-6 text-sm text-gray-500">{message}</div>;
+}
+
+function Carousel({ slides }) {
   const [current, setCurrent] = useState(0);
+  const safeSlides = slides.length > 0 ? slides : [{ src: FALLBACK_IMAGE, alt: "Fallback slide" }];
 
-  const prev = () => setCurrent((i) => (i - 1 + slides.length) % slides.length);
-  const next = () => setCurrent((i) => (i + 1) % slides.length);
+  useEffect(() => {
+    setCurrent(0);
+  }, [safeSlides.length]);
+
+  const prev = () => setCurrent((i) => (i - 1 + safeSlides.length) % safeSlides.length);
+  const next = () => setCurrent((i) => (i + 1) % safeSlides.length);
+
+  // ถ้ารูปสไลด์มีแค่ 1 รูป ให้ซ่อนปุ่มและจุดควบคุม
+
+  const showControls = safeSlides.length > 1;
+
+  if (!showControls) {
+    return (
+      <div className="relative w-full overflow-hidden rounded-2xl sm:w-full">
+        <div className="relative h-56 md:h-96">
+          <img
+            src={safeSlides[0].src}
+            alt={safeSlides[0].alt}
+            className="absolute block w-full h-full object-contain md:object-cover -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+          />
+        </div>
+      </div>
+    );
+  }
+
 
   return (
     <div className="relative w-full overflow-hidden rounded-2xl sm:w-full">
+
       <div className="relative h-56 md:h-96">
-        {slides.map((slide, idx) => (
+        {safeSlides.map((slide, idx) => (
           <div
             key={idx}
             className={`absolute inset-0 transition-opacity duration-700 ${idx === current ? "opacity-100 z-10" : "opacity-0 z-0"}`}
@@ -29,7 +66,7 @@ function Carousel() {
             <img
               src={slide.src}
               alt={slide.alt}
-              className="absolute block w-full h-full object-cover -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+              className="absolute block w-full h-full object-contain md:object-cover -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
             />
           </div>
         ))}
@@ -61,7 +98,7 @@ function Carousel() {
 
       {/* dots */}
       <div className="absolute bottom-3 left-1/2 z-30 flex -translate-x-1/2 gap-2">
-        {slides.map((_, idx) => (
+        {safeSlides.map((_, idx) => (
           <button
             key={idx}
             type="button"
@@ -74,125 +111,221 @@ function Carousel() {
   );
 }
 
-function Category() {
+function Category({ categories, isLoading, error }) {
+  const visibleCategories = categories.slice(0, 3);
+
   return (
     <div className="container ">
-      <div className="flex  justify-between items-center" >
-        <h2 className="text-3xl font-bold mb-4">หมวดหมู่</h2>
-        <a className="text-blue-500 hover:underline border border-blue-500  px-4 py-2 rounded" href="/shop">ไปที่ร้านค้า</a>
-      </div>
-      <div className="grid grid-cols-2 gap-4 ">
-        <img src="https://img2.pic.in.th/pic/pimpaw-4daa1ee07fe0cc10.png" alt="image" className="rounded-lg w-full" />
-        <img src="https://img2.pic.in.th/pic/pimpaw-4daa1ee07fe0cc10.png" alt="image" className="rounded-lg w-full" />
-        <img src="https://img2.pic.in.th/pic/pimpaw-4daa1ee07fe0cc10.png" alt="image" className="rounded-lg w-full" />
-
-      </div>
-
+      <SectionHeader title="หมวดหมู่" href="/store/products" linkLabel="ไปที่ร้านค้า" />
+      {isLoading ? (
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {[1, 2, 3].map((item) => (
+            <div key={item} className="h-44 animate-pulse rounded-lg bg-gray-200" />
+          ))}
+        </div>
+      ) : error ? (
+        <SectionMessage message="ไม่สามารถโหลดข้อมูลหมวดหมู่ได้" />
+      ) : visibleCategories.length === 0 ? (
+        <SectionMessage message="ยังไม่มีหมวดหมู่ให้แสดง" />
+      ) : (
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {visibleCategories.map((category) => (
+            <a key={category.id} href={`/store/products/${category.id}`} className="relative block overflow-hidden rounded-lg bg-white">
+              <img
+                src={category.image_url || FALLBACK_IMAGE}
+                alt={category.name}
+                className="h-44 w-full object-cover md:h-56"
+              />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-4 py-3 text-white">
+                <h3 className="text-lg font-semibold">{category.name}</h3>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
     </div>
-
   );
 }
 
-function ProductCard() {
+function ProductCard({ products, isLoading, error, onBuyProduct }) {
+  const visibleProducts = products.slice(0, 6);
+
   return (
-        <div className="container ">
-      <div className="flex  justify-between items-center" >
-        <h2 className="text-3xl font-bold mb-4">สินค้าแนะนำ</h2>
-        <a className="text-blue-500 hover:underline border border-blue-500  px-4 py-2 rounded" href="/shop">ไปที่ร้านค้า</a>
-      </div>
-      <div className="grid grid-cols-4 gap-4 ">
-     <div className="border border-black rounded-lg py-4 px-3 w-fit bg-white ">
-        <div className="flex flex-col items-center gap-4">
-            <img src="https://img2.pic.in.th/pic/Ghost-of-Tsushima.png" alt="productimage" className="  object-cover rounded w-full" />
-            <div>
-                <h3 className="text-xl font-bold">Ghost of Tsushima</h3>
-                <p className="text-gray-600">ราคา: 1,500 บาท</p>
-                <p className="text-gray-600">สถานะ: มีสินค้าในสต็อก</p>
-            </div>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">ซื้อสินค้า</button>
-            
-          </div>
-      </div>
-        <div className="border border-black rounded-lg p-4 px-4 w-fit bg-white">
-        <div className="flex flex-col items-center gap-4">
-            <img src="https://img2.pic.in.th/pic/Ghost-of-Tsushima.png" alt="productimage" className="w-full  object-cover rounded" />
-            <div>
-                <h3 className="text-xl font-bold">Ghost of Tsushima</h3>
-                <p className="text-gray-600">ราคา: 1,500 บาท</p>
-                <p className="text-gray-600">สถานะ: มีสินค้าในสต็อก</p>
-            </div>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">ซื้อสินค้า</button>
-            
-          </div>
-      </div>
-        <div className="border border-black rounded-lg p-4 px-4 w-fit bg-white">
-        <div className="flex flex-col items-center gap-4">
-            <img src="https://img2.pic.in.th/pic/Ghost-of-Tsushima.png" alt="productimage" className="w-full  object-cover rounded" />
-            <div>
-                <h3 className="text-xl font-bold">Ghost of Tsushima</h3>
-                <p className="text-gray-600">ราคา: 1,500 บาท</p>
-                <p className="text-gray-600">สถานะ: มีสินค้าในสต็อก</p>
-            </div>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">ซื้อสินค้า</button>
-            
-          </div>
-      </div>
-           <div className="border border-black rounded-lg p-4 px-4 w-fit bg-white">
-        <div className="flex flex-col items-center gap-4">
-            <img src="https://img2.pic.in.th/pic/Ghost-of-Tsushima.png" alt="productimage" className="w-full  object-cover rounded" />
-            <div>
-                <h3 className="text-xl font-bold">Ghost of Tsushima</h3>
-                <p className="text-gray-600">ราคา: 1,500 บาท</p>
-                <p className="text-gray-600">สถานะ: มีสินค้าในสต็อก</p>
-            </div>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">ซื้อสินค้า</button>
-            
-          </div>
-      </div>
-        <div className="border border-black rounded-lg p-4 px-4 w-fit bg-white">
-        <div className="flex flex-col items-center gap-4">
-            <img src="https://img2.pic.in.th/pic/Ghost-of-Tsushima.png" alt="productimage" className="w-full  object-cover rounded" />
-            <div>
-                <h3 className="text-xl font-bold">Ghost of Tsushima</h3>
-                <p className="text-gray-600">ราคา: 1,500 บาท</p>
-                <p className="text-gray-600">สถานะ: มีสินค้าในสต็อก</p>
-            </div>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">ซื้อสินค้า</button>
-            
-          </div>
-      </div>
-        <div className="border border-black rounded-lg p-4 px-4 w-fit bg-white">
-        <div className="flex flex-col items-center gap-4">
-            <img src="https://img2.pic.in.th/pic/Ghost-of-Tsushima.png" alt="productimage" className="w-full  object-cover rounded" />
-            <div>
-                <h3 className="text-xl font-bold">Ghost of Tsushima</h3>
-                <p className="text-gray-600">ราคา: 1,500 บาท</p>
-                <p className="text-gray-600">สถานะ: มีสินค้าในสต็อก</p>
-            </div>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">ซื้อสินค้า</button>
-            
-          </div>
-      </div>
-      
-      
-      </div>
- 
-  </div>
+    <div className="container ">
+      <SectionHeader title="สินค้าแนะนำ" href="/store/products" linkLabel="ไปที่ร้านค้า" />
+      {isLoading ? (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 xl:grid-cols-4">
+          {[1, 2, 3, 4].map((item) => (
+            <div key={item} className="h-80 animate-pulse rounded-lg bg-gray-200" />
+          ))}
+        </div>
+      ) : error ? (
+        <SectionMessage message="ไม่สามารถโหลดข้อมูลสินค้าได้" />
+      ) : visibleProducts.length === 0 ? (
+        <SectionMessage message="ยังไม่มีสินค้าแนะนำ" />
+      ) : (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 xl:grid-cols-4 md:w-full md:h-auto md:grid-cols-3">
+          {visibleProducts.map((product) => {
+            const price = Number(product.price || 0);
+            const stock = Number(product.stock || 0);
+
+            return (
+              <div key={product.id} className="w-full rounded-lg border border-black bg-white p-4">
+                <div className="flex flex-col gap-4">
+                  <img
+                    src={product.image_url || FALLBACK_PRODUCT_IMAGE}
+                    alt={product.name}
+                    className="h-auto w-full rounded object-cover"
+                  />
+                  <div>
+                    <h3 className="text-xl font-bold">{product.name}</h3>
+                    <p className="text-gray-600">ราคา: {price.toLocaleString("th-TH")} บาท</p>
+                    <p className="text-gray-600">สินค้าคงเหลือ: {product.stock}</p>
+                  </div>
+                  <button
+                    type="button"
+                    className="inline-flex rounded bg-blue-500 px-4 py-2 text-center text-white hover:bg-blue-600 disabled:cursor-not-allowed disabled:bg-gray-400 items-center justify-center"
+                    disabled={stock <= 0}
+                    onClick={() => onBuyProduct(product)}
+                  >
+                    ซื้อสินค้า
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
   );
 }
-
-
 
 function Home() {
+  const [slides, setSlides] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState({
+    carousels: true,
+    categories: true,
+    products: true,
+  });
+  const [errors, setErrors] = useState({
+    carousels: false,
+    categories: false,
+    products: false,
+  });
+
+  const handleBuyProduct = async (product) => {
+    await openBuyProductModal(product, {
+      onSuccess: ({ quantity }) => {
+        setProducts((prev) => prev.map((item) => {
+          if (item.id !== product.id) {
+            return item;
+          }
+
+          const currentStock = Number(item.stock || 0);
+          return {
+            ...item,
+            stock: Math.max(currentStock - Number(quantity || 0), 0),
+          };
+        }));
+      },
+    });
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchJson = async (url) => {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Request failed: ${response.status}`);
+      }
+      return response.json();
+    };
+
+    const loadHomeData = async () => {
+      const [carouselResult, categoryResult, productResult] = await Promise.allSettled([
+        fetchJson(`${API_BASE}/carousels/getCarousels`),
+        fetchJson(`${API_BASE}/categories/getCategories`),
+        fetchJson(`${API_BASE}/products/getProducts`),
+      ]);
+
+      if (!isMounted) {
+        return;
+      }
+
+      if (carouselResult.status === "fulfilled") {
+        setSlides(
+          carouselResult.value.map((item, index) => ({
+            src: item.image_url || FALLBACK_IMAGE,
+            alt: `Slide ${index + 1}`,
+          }))
+        );
+      } else {
+        setErrors((prev) => ({ ...prev, carousels: true }));
+      }
+
+      if (categoryResult.status === "fulfilled") {
+        setCategories(categoryResult.value);
+      } else {
+        setErrors((prev) => ({ ...prev, categories: true }));
+      }
+
+      if (productResult.status === "fulfilled") {
+        setProducts(productResult.value);
+      } else {
+        setErrors((prev) => ({ ...prev, products: true }));
+      }
+
+      setLoading({
+        carousels: false,
+        categories: false,
+        products: false,
+      });
+    };
+
+    loadHomeData().catch(() => {
+      if (!isMounted) {
+        return;
+      }
+
+      setErrors({
+        carousels: true,
+        categories: true,
+        products: true,
+      });
+      setLoading({
+        carousels: false,
+        categories: false,
+        products: false,
+      });
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 ">
-      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 " >
-        <Carousel />
+      <main className="mx-auto max-w-6xl px-4   sm:px-6 lg:px-8 lg:py-8 rounded-lg " >
+        <Carousel slides={slides} />
+        {loading.carousels === false && errors.carousels && slides.length === 0 ? (
+          <div className="mt-3">
+            <SectionMessage message="ไม่สามารถโหลดรูปสไลด์ได้ กำลังใช้ภาพสำรองแทน" />
+          </div>
+        ) : null}
         <div className="mt-5">
-          <Category />
+          <Category categories={categories} isLoading={loading.categories} error={errors.categories} />
         </div>
         <div className="mt-5">
-          <ProductCard />
+          <ProductCard
+            products={products}
+            isLoading={loading.products}
+            error={errors.products}
+            onBuyProduct={handleBuyProduct}
+          />
         </div>
       </main>
 

@@ -58,6 +58,15 @@ CREATE TABLE IF NOT EXISTS stock (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ========================================
+-- Table: carousels
+-- ========================================
+CREATE TABLE IF NOT EXISTS carousels (
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    image_url  VARCHAR(500) NOT NULL,
+    created_at TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ========================================
 -- Table: order_history
 -- ========================================
 CREATE TABLE IF NOT EXISTS order_history (

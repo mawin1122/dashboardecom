@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { Home, Package, Tags, History, Users, ShoppingBag, LogIn, LogOut, User, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -22,21 +23,32 @@ export function BottomNavBar({ className, stickyTop = true, stickyBottom = false
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchProfile = async () => {
       try {
         const res = await fetch("http://localhost:3001/api/users/profile", {
           credentials: "include",
           cache: "no-store",
           headers: getAuthHeaders(),
+          signal: controller.signal,
         });
         if (res.ok) setUser(await res.json());
         else setUser(null);
-      } catch {
+      } catch (error) {
+        if (error?.name === "AbortError") {
+          return;
+        }
         setUser(null);
       }
     };
+
     fetchProfile();
-  }, [pathname]);
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
 
   useEffect(() => { setMobileOpen(false); }, [pathname]);
 
@@ -55,11 +67,6 @@ export function BottomNavBar({ className, stickyTop = true, stickyBottom = false
   };
 
 
-  const navigate = (href) => {
-    setMobileOpen(false);
-    router.push(href);
-  };
-
   return (
     <header
       className={cn(
@@ -72,16 +79,12 @@ export function BottomNavBar({ className, stickyTop = true, stickyBottom = false
       <div className="mx-auto max-w-5xl px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
 
         {/* brand */}
-        <button
-          type="button"
-          onClick={() => navigate("/home")}
-          className="flex items-center gap-2 shrink-0 focus:outline-none"
-        >
+        <Link href="/home" className="flex items-center gap-2 shrink-0 focus:outline-none">
           <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
             <ShoppingBag size={14} strokeWidth={2.5} className="text-primary-foreground" />
           </span>
           <span className="font-semibold text-sm tracking-tight">E-Commerce</span>
-        </button>
+        </Link>
 
         {/* desktop nav */}
         <nav className="hidden md:flex items-center gap-1 flex-1 px-4">
@@ -93,11 +96,13 @@ export function BottomNavBar({ className, stickyTop = true, stickyBottom = false
                 key={item.label}
                 variant={isActive ? "secondary" : "ghost"}
                 size="sm"
-                onClick={() => navigate(item.href)}
+                asChild
                 className="gap-1.5 text-xs"
               >
-                <Icon size={14} />
-                {item.label}
+                <Link href={item.href}>
+                  <Icon size={14} />
+                  {item.label}
+                </Link>
               </Button>
             );
           })}
@@ -129,11 +134,13 @@ export function BottomNavBar({ className, stickyTop = true, stickyBottom = false
           ) : (
             <Button
               size="sm"
-              onClick={() => navigate("/login")}
+              asChild
               className="hidden md:flex gap-1.5 text-xs"
             >
-              <LogIn size={14} />
-              เข้าสู่ระบบ
+              <Link href="/login">
+                <LogIn size={14} />
+                เข้าสู่ระบบ
+              </Link>
             </Button>
           )}
 
@@ -162,10 +169,12 @@ export function BottomNavBar({ className, stickyTop = true, stickyBottom = false
                   key={item.label}
                   variant={isActive ? "secondary" : "ghost"}
                   className="justify-start gap-2"
-                  onClick={() => navigate(item.href)}
+                  asChild
                 >
-                  <Icon size={16} />
-                  {item.label}
+                  <Link href={item.href}>
+                    <Icon size={16} />
+                    {item.label}
+                  </Link>
                 </Button>
               );
             })}
@@ -193,9 +202,11 @@ export function BottomNavBar({ className, stickyTop = true, stickyBottom = false
           ) : (
             <>
               <Separator className="my-3" />
-              <Button className="w-full gap-2" onClick={() => navigate("/login")}>
-                <LogIn size={16} />
-                เข้าสู่ระบบ
+              <Button className="w-full gap-2" asChild>
+                <Link href="/login" onClick={() => setMobileOpen(false)}>
+                  <LogIn size={16} />
+                  เข้าสู่ระบบ
+                </Link>
               </Button>
             </>
           )}

@@ -9,6 +9,7 @@ const ensureOrderHistoryTable = (callback) => {
             quantity INT NOT NULL,
             unit_price DECIMAL(10,2) NOT NULL,
             total_price DECIMAL(10,2) NOT NULL,
+            purchased_items TEXT NULL,
             status VARCHAR(20) NOT NULL DEFAULT 'completed',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -33,6 +34,9 @@ const ensureOrderHistoryTable = (callback) => {
             }
             if (!existing.has('status')) {
                 alterQueries.push("ALTER TABLE order_history ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'completed' AFTER total_price");
+            }
+            if (!existing.has('purchased_items')) {
+                alterQueries.push('ALTER TABLE order_history ADD COLUMN purchased_items TEXT NULL AFTER total_price');
             }
             if (!existing.has('created_at')) {
                 alterQueries.push('ALTER TABLE order_history ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER status');
@@ -179,6 +183,15 @@ exports.buyProduct = (req, res) => {
                                         }
 
                                         const hasStockColumn = columns.some((column) => column.Field === 'stock');
+                                        const consumedStockEntries = stockResults
+                                            .map((item) => ({
+                                                stock_id: Number(item.id),
+                                                item: String(item.items || '').trim(),
+                                            }))
+                                            .filter((entry) => Number.isInteger(entry.stock_id) && entry.stock_id > 0 && entry.item.length > 0);
+                                        const purchasedItemsText = consumedStockEntries.length > 0
+                                            ? JSON.stringify(consumedStockEntries)
+                                            : null;
 
                                         const finish = () => {
                                             connection.commit((commitErr) => {
@@ -195,16 +208,16 @@ exports.buyProduct = (req, res) => {
                                                     quantity: qty,
                                                     unit_price: unitPrice,
                                                     points_spent: pointsNeeded,
-                                                    consumed: stockResults.map((item) => item.items),
+                                                    consumed: consumedStockEntries,
                                                 });
                                             });
                                         };
 
                                         const insertHistoryAndFinish = () => {
-                                            const insertHistoryQuery = 'INSERT INTO order_history (user_id, product_id, quantity, unit_price, total_price, status) VALUES (?, ?, ?, ?, ?, ?)';
+                                            const insertHistoryQuery = 'INSERT INTO order_history (user_id, product_id, quantity, unit_price, total_price, purchased_items, status) VALUES (?, ?, ?, ?, ?, ?, ?)';
                                             connection.query(
                                                 insertHistoryQuery,
-                                                [req.user.id, productId, qty, unitPrice, unitPrice * qty, 'completed'],
+                                                [req.user.id, productId, qty, unitPrice, unitPrice * qty, purchasedItemsText || null, 'completed'],
                                                 (historyErr, historyResult) => {
                                                     if (historyErr) {
                                                         return connection.rollback(() => {
